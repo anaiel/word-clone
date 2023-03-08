@@ -1,7 +1,7 @@
 import React from "react";
 import { NUM_OF_LETTERS } from "../../constants";
 
-function GuessInput({ value, onChange, onSubmit }) {
+function GuessInput({ value, onChange, onSubmit, disabled }) {
   const handleChange = (e) => {
     onChange(e.target.value.toUpperCase().slice(0, NUM_OF_LETTERS));
   };
@@ -19,6 +19,7 @@ function GuessInput({ value, onChange, onSubmit }) {
         pattern={`[A-Z]{${NUM_OF_LETTERS}}`}
         value={value}
         onChange={handleChange}
+        disabled={disabled}
       />
     </form>
   );
