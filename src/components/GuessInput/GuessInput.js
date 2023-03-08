@@ -1,8 +1,9 @@
 import React from "react";
+import { NUM_OF_LETTERS } from "../../constants";
 
 function GuessInput({ value, onChange, onSubmit }) {
   const handleChange = (e) => {
-    onChange(e.target.value.toUpperCase().slice(0, 5));
+    onChange(e.target.value.toUpperCase().slice(0, NUM_OF_LETTERS));
   };
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,7 +16,7 @@ function GuessInput({ value, onChange, onSubmit }) {
       <input
         type="text"
         id="guess-input"
-        pattern="[A-Z]{5}"
+        pattern={`[A-Z]{${NUM_OF_LETTERS}}`}
         value={value}
         onChange={handleChange}
       />
