@@ -1,46 +1,35 @@
 import React from "react";
 import GuessInput from "../GuessInput/GuessInput";
 import GuessResults from "../GuessResults/GuessResults";
-import { checkGuess } from "../../game-helpers";
-
-import { sample } from "../../utils";
-import { WORDS } from "../../data";
-import { NUM_OF_GUESSES_ALLOWED, NUM_OF_LETTERS } from "../../constants";
+import { NUM_OF_LETTERS } from "../../constants";
 import EndBanner from "../EndBanner/EndBanner";
 import Keyboard from "../Keyboard/Keyboard";
 import RestartButton from "../RestartButton/RestartButton";
+import { gameReducer, initGame } from "../../game-helpers";
 
 function Game() {
-  const [answer, setAnswer] = React.useState(sample(WORDS));
-  const [guess, setGuess] = React.useState("");
-  const [previousGuesses, setPreviousGuesses] = React.useState([]);
-  const [end, setEnd] = React.useState(undefined);
+  const [{ answer, guess, end, previousGuesses }, dispatch] = React.useReducer(
+    gameReducer,
+    initGame()
+  );
 
   React.useEffect(() => {
     console.info({ answer });
   }, [answer]);
 
+  const handleChange = (value) =>
+    dispatch({ type: "UPDATE_GUESS", guess: value });
   const handleSubmit = () => {
     console.log({ guess });
-
-    const guessInfo = checkGuess(guess, answer);
-    if (guessInfo.every((letter) => letter.status === "correct")) setEnd("win");
-    else if (previousGuesses.length + 1 === NUM_OF_GUESSES_ALLOWED)
-      setEnd("lose");
-
-    setPreviousGuesses((curr) => [...curr, guessInfo]);
-    setGuess("");
+    dispatch({ type: "SUBMIT_GUESS" });
   };
   const handleClick = (letter) => {
     if (guess.length >= NUM_OF_LETTERS) return;
-    setGuess((curr) => curr + letter);
+    dispatch({ type: "UPDATE_GUESS", guess: guess + letter });
   };
 
   const handleRestartClick = () => {
-    setAnswer(sample(WORDS));
-    setEnd(undefined);
-    setGuess("");
-    setPreviousGuesses([]);
+    dispatch({type: "RESET"});
   };
 
   return (
@@ -49,7 +38,7 @@ function Game() {
       <GuessResults guesses={previousGuesses} />
       <GuessInput
         value={guess}
-        onChange={(value) => setGuess(value)}
+        onChange={handleChange}
         onSubmit={handleSubmit}
         disabled={!!end}
       />
