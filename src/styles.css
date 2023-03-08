@@ -222,6 +222,15 @@ h1 {
   background-color: var(--color-warning);
 }
 
+.restart-btn {
+  background-color: var(--color-gray-300);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 4px;
+  width: fit-content;
+  margin-inline: auto;
+}
+
 .visually-hidden {
   position: absolute;
   overflow: hidden;

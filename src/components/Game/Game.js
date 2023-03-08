@@ -8,16 +8,17 @@ import { WORDS } from "../../data";
 import { NUM_OF_GUESSES_ALLOWED, NUM_OF_LETTERS } from "../../constants";
 import EndBanner from "../EndBanner/EndBanner";
 import Keyboard from "../Keyboard/Keyboard";
-
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
+import RestartButton from "../RestartButton/RestartButton";
 
 function Game() {
+  const [answer, setAnswer] = React.useState(sample(WORDS));
   const [guess, setGuess] = React.useState("");
   const [previousGuesses, setPreviousGuesses] = React.useState([]);
   const [end, setEnd] = React.useState(undefined);
+
+  React.useEffect(() => {
+    console.info({ answer });
+  }, [answer]);
 
   const handleSubmit = () => {
     console.log({ guess });
@@ -35,8 +36,16 @@ function Game() {
     setGuess((curr) => curr + letter);
   };
 
+  const handleRestartClick = () => {
+    setAnswer(sample(WORDS));
+    setEnd(undefined);
+    setGuess("");
+    setPreviousGuesses([]);
+  };
+
   return (
     <>
+      {!!end && <RestartButton onClick={handleRestartClick} />}
       <GuessResults guesses={previousGuesses} />
       <GuessInput
         value={guess}
